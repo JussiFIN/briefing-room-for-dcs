@@ -46,7 +46,6 @@
             this.BottomStatusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.MainSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.TemplatePropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.T_File_New = new System.Windows.Forms.ToolStripButton();
             this.T_File_Open = new System.Windows.Forms.ToolStripButton();
@@ -58,6 +57,7 @@
             this.T_Mission_Export = new System.Windows.Forms.ToolStripButton();
             this.T_Mission_ExportBriefing = new System.Windows.Forms.ToolStripDropDownButton();
             this.T_Mission_ExportBriefingHTML = new System.Windows.Forms.ToolStripMenuItem();
+            this.TemplateTreeView = new System.Windows.Forms.TreeView();
             this.MenuStripMain.SuspendLayout();
             this.BottomStatusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitContainer)).BeginInit();
@@ -213,7 +213,7 @@
             // 
             // MainSplitContainer.Panel1
             // 
-            this.MainSplitContainer.Panel1.Controls.Add(this.TemplatePropertyGrid);
+            this.MainSplitContainer.Panel1.Controls.Add(this.TemplateTreeView);
             this.MainSplitContainer.Panel1.Controls.Add(this.toolStrip1);
             // 
             // MainSplitContainer.Panel2
@@ -223,17 +223,6 @@
             this.MainSplitContainer.Size = new System.Drawing.Size(784, 515);
             this.MainSplitContainer.SplitterDistance = 326;
             this.MainSplitContainer.TabIndex = 4;
-            // 
-            // TemplatePropertyGrid
-            // 
-            this.TemplatePropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TemplatePropertyGrid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TemplatePropertyGrid.Location = new System.Drawing.Point(0, 25);
-            this.TemplatePropertyGrid.Name = "TemplatePropertyGrid";
-            this.TemplatePropertyGrid.Size = new System.Drawing.Size(326, 490);
-            this.TemplatePropertyGrid.TabIndex = 1;
-            this.TemplatePropertyGrid.ToolbarVisible = false;
-            this.TemplatePropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.TemplatePropertyGrid_PropertyValueChanged);
             // 
             // toolStrip1
             // 
@@ -338,6 +327,14 @@
             this.T_Mission_ExportBriefingHTML.Text = "Export briefing to HTML";
             this.T_Mission_ExportBriefingHTML.Click += new System.EventHandler(this.MenuClick);
             // 
+            // TemplateTreeView
+            // 
+            this.TemplateTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TemplateTreeView.Location = new System.Drawing.Point(0, 25);
+            this.TemplateTreeView.Name = "TemplateTreeView";
+            this.TemplateTreeView.Size = new System.Drawing.Size(326, 490);
+            this.TemplateTreeView.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -398,11 +395,11 @@
         private System.Windows.Forms.ToolStripDropDownButton T_Mission_ExportBriefing;
         private System.Windows.Forms.ToolStripMenuItem T_Mission_ExportBriefingHTML;
         private System.Windows.Forms.ToolStripMenuItem M_Mission_ExportBriefingHTML;
-        private System.Windows.Forms.PropertyGrid TemplatePropertyGrid;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton T_File_New;
         private System.Windows.Forms.ToolStripButton T_File_Open;
         private System.Windows.Forms.ToolStripButton T_File_SaveAs;
         private System.Windows.Forms.ToolStripMenuItem M_Mission_DebugExport;
+        private System.Windows.Forms.TreeView TemplateTreeView;
     }
 }
