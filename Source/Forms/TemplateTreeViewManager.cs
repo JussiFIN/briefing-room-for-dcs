@@ -51,10 +51,7 @@ namespace BriefingRoom4DCSWorld.Forms
             TemplateTreeView.NodeMouseClick += OnNodeMouseClick;
             TemplateTreeView.ShowNodeToolTips = true;
 
-            NodeMenu = new ContextMenuStrip();
-            NodeMenu.BackColor = BACKGROUND_COLOR;
-            NodeMenu.Font = FONT;
-            NodeMenu.ForeColor = FOREGROUND_COLOR;
+            NodeMenu = new ContextMenuStrip { BackColor = BACKGROUND_COLOR, Font = FONT, ForeColor = FOREGROUND_COLOR };
             NodeMenu.ItemClicked += OnNodeMenuItemClicked;
             NodeMenu.ShowCheckMargin = false;
             NodeMenu.ShowImageMargin = false;
@@ -65,20 +62,38 @@ namespace BriefingRoom4DCSWorld.Forms
 
         public void RefreshAll()
         {
+            TreeNode node;
+
             TemplateTreeView.Nodes.Clear();
-            TemplateTreeView.Nodes.Add("theater", "");
-            TemplateTreeView.Nodes.Add("weather", "");
+            
+            node = TemplateTreeView.Nodes.Add("theater", "");
+            node.Nodes.Add("theaterCountriesCoalitions", "");
+            node.Nodes.Add("theaterHomeAirbase", "");
+
+            node = TemplateTreeView.Nodes.Add("environment", "Environment");
+            node.Nodes.Add("environmentSeason", "");
+            node.Nodes.Add("environmentTimeOfDay", "");
+
+            node = TemplateTreeView.Nodes.Add("weather", "");
+            node.Nodes.Add("weatherWind", "");
+
             UpdateNodeValues();
+            TemplateTreeView.ExpandAll();
         }
 
         private void UpdateNodeValues()
         {
-            foreach (TreeNode n in TemplateTreeView.Nodes)
+            foreach (TreeNode n in TemplateTreeView.Nodes.GetAllNodes())
             {
                 switch (n.Name)
                 {
+                    case "environmentSeason": n.Text = $"Season: {Template.EnvironmentSeason}"; break;
+                    case "environmentTimeOfDay": n.Text = $"Time of day: {Template.EnvironmentTimeOfDay}"; break;
                     case "theater": n.Text = $"Theater: {Template.TheaterID}"; break;
+                    case "theaterCountriesCoalitions": n.Text = $"Countries coalitions: {Template.TheaterRegionsCoalitions}"; break;
+                    case "theaterHomeAirbase": n.Text = $"Home airbase: {(string.IsNullOrEmpty(Template.TheaterStartingAirbase) ? "(Random)" : Template.TheaterStartingAirbase)}"; break;
                     case "weather": n.Text = $"Weather: {Template.EnvironmentWeather}"; break;
+                    case "weatherWind": n.Text = $"Wind: {Template.EnvironmentWind}"; break;
                 }
             }
 
@@ -92,8 +107,16 @@ namespace BriefingRoom4DCSWorld.Forms
 
             switch (e.Node.Name)
             {
+                case "environmentSeason": ShowDropDownMenuEnum<Season>(e.Location); return;
+                case "environmentTimeOfDay": ShowDropDownMenuEnum<TimeOfDay>(e.Location); return;
                 case "theater": ShowDropDownMenuDB<DBEntryTheater>(e.Location); return;
+                case "theaterCountriesCoalitions": ShowDropDownMenuEnum<CountryCoalition>(e.Location); return;
+                case "theaterHomeAirbase":
+                    ShowDropDownMenuString(e.Location,
+                        (from DBEntryTheaterAirbase ab in Database.Instance.GetEntry<DBEntryTheater>(Template.TheaterID).Airbases select ab.Name).ToArray());
+                    return;
                 case "weather": ShowDropDownMenuEnum<Weather>(e.Location); return;
+                case "weatherWind": ShowDropDownMenuEnum<Wind>(e.Location); return;
             }
         }
 
@@ -104,8 +127,13 @@ namespace BriefingRoom4DCSWorld.Forms
             switch (TemplateTreeView.SelectedNode.Name)
             {
                 default: return; // Invalid value, return now because there's no need to call UpdateNodeValues()
+                case "environmentSeason": Template.EnvironmentSeason = (Season)e.ClickedItem.Tag; break;
+                case "environmentTimeOfDay": Template.EnvironmentTimeOfDay = (TimeOfDay)e.ClickedItem.Tag; break;
                 case "theater": Template.TheaterID = (string)e.ClickedItem.Tag; break;
+                case "theaterCountriesCoalitions": Template.TheaterRegionsCoalitions = (CountryCoalition)e.ClickedItem.Tag; break;
+                case "theaterHomeAirbase": Template.TheaterStartingAirbase = (string)e.ClickedItem.Tag; break;
                 case "weather": Template.EnvironmentWeather = (Weather)e.ClickedItem.Tag; break;
+                case "weatherWind": Template.EnvironmentWind = (Wind)e.ClickedItem.Tag; break;
             }
 
             UpdateNodeValues();
@@ -125,6 +153,15 @@ namespace BriefingRoom4DCSWorld.Forms
             NodeMenu.Items.Clear();
             foreach (T value in Toolbox.GetEnumValues<T>())
                 NodeMenu.Items.Add(value.ToString()).Tag = value;
+
+            NodeMenu.Show(TemplateTreeView, location);
+        }
+
+        private void ShowDropDownMenuString(Point location, params string[] values)
+        {
+            NodeMenu.Items.Clear();
+            foreach (string value in values)
+                NodeMenu.Items.Add(value).Tag = value;
 
             NodeMenu.Show(TemplateTreeView, location);
         }
